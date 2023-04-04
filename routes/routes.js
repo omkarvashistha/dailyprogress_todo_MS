@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const todoController = require('../Controller/todoController');
+const cors = require('cors')
+
+router.use(cors())
 
 router.post('/:username/addTodo',todoController.addTodo);
 
