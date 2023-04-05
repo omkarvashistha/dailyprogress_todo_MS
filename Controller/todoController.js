@@ -74,6 +74,41 @@ exports.getTodo = async(req,res)=>{
     }
 }
 
+exports.markComplete = async(req,res)=>{
+    try {
+        const username = req.params.username;
+        const id = req.body.id;
+
+        const userData = await todoRepo.find({username : username});
+
+        if(userData) {
+
+            const updateComplete = await todoRepo.findOneAndUpdate({
+                username : username,
+                'todoData.id' : id
+            },{
+                '$set' : {'todoData.$.complete' : true}
+            })
+
+            if(updateComplete) {
+                res.status(201).json({
+                    message : "Updated Succesfull"
+                })
+            } else {
+                res.status(400).json({
+                    message : "Not updated try again"
+                })
+            }
+
+        }
+
+    } catch (error) {
+        res.status(400).json({
+            message : error.message
+        })
+    }
+}
+
 
 exports.invalid = async(req,res,next) => {
     const err = new Error();
