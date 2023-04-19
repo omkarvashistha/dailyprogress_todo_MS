@@ -109,6 +109,49 @@ exports.markComplete = async(req,res)=>{
     }
 }
 
+exports.deleteTodo = async(req,res)=>{
+    try {
+        const id = req.body.id;
+        const username = req.params.username;
+
+        //const userInfo = await todoRepo.find({username})
+
+        const deleteTodoResponse = await todoRepo.updateOne(
+            {
+                username : username
+            },
+            {
+                "$pull" : {
+                    "todoData" : {
+                        "id" : id
+                    }
+                }
+            },
+            {
+                safe : true,
+                multi : true
+            });
+
+        if(deleteTodoResponse) {
+            res.status(201).json({
+                message : "deleted"
+            })
+        } else {
+            res.status(201).json({
+                message : "not deleted"
+            })
+        }
+
+
+    } catch (error) {
+        res.status(400).json({
+            message : error.message
+        })
+    }
+}
+
+ 
+
 
 exports.invalid = async(req,res,next) => {
     const err = new Error();

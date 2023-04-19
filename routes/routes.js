@@ -11,6 +11,8 @@ router.get('/:username/getTodo',todoController.getTodo);
 
 router.put('/:username/markComplete',todoController.markComplete);
 
+router.put('/:username/deleteTodo',todoController.deleteTodo);
+
 router.all('*',todoController.invalid);
 
 module.exports = router
